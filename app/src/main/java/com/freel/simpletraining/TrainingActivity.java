@@ -53,12 +53,29 @@ public class TrainingActivity extends AppCompatActivity{
 
     private void setListAdapter(){
         exerciseType = dbHelper.getExerciseList();
+        Log.d("EXERCISE: ", String.valueOf(exerciseType.size()));
         // адаптер
         ArrayAdapter<StringWithId> adapter = new ArrayAdapter<StringWithId>(this, android.R.layout.simple_spinner_item, exerciseType);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                StringWithId mSelected = (StringWithId) parent.getItemAtPosition(pos);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+                Log.i("Message", "Nothing is selected");
+
+            }
+
+
+        });
         // заголовок
         spinner.setPrompt("Вид");
 

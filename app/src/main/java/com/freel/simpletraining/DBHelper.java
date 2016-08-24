@@ -39,7 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
             createArgumentTable(sqLiteDatabase);
             createRepeatTable(sqLiteDatabase);
 
-
+            fillExerciseTable(sqLiteDatabase);
         } catch (Exception e){
             Log.d("DBHelper", "--- Create Error --- " + e);
             return;
@@ -83,11 +83,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public List<StringWithId> getExerciseList(){
 
-        Cursor c = db.query("user", null, null, null, null, null, null);
+        Cursor c = db.query("exercise", null, null, null, null, null, null);
 
         List<StringWithId> list = new ArrayList<StringWithId>();
 
-        if (c.moveToLast()) {
+        if (c.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
             int id = c.getColumnIndex("id");
@@ -305,7 +305,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*Создание таблиц*/
     //Названия упражнений
     private void createExerciseTable(SQLiteDatabase sqLiteDatabase){
-        sqLiteDatabase.execSQL("create table exercises ("
+        sqLiteDatabase.execSQL("create table exercise ("
                 + "id integer primary key autoincrement,"
                 + "name text" + ");");
     }
@@ -368,5 +368,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "height integer,"
                 + "weight integer,"
                 + "timestamp datetime DEFAULT CURRENT_TIMESTAMP" + ");");
+    }
+
+    private void fillExerciseTable(SQLiteDatabase sqLiteDatabase){
+        // TODO Заполнение с сервера
+        String[] names = {"Бег", "Прыг", "Скок"};
+        int size = names.length;
+        for (int i=0; i<size; i++){
+            cv.put("name", names[i]);
+            sqLiteDatabase.insert("exercise", null, cv);
+            cv.clear();
+        }
+
     }
 }
